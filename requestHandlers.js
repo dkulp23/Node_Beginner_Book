@@ -1,6 +1,7 @@
 'use strict';
 
 const querystring = require('querystring');
+const fs = require('fs');
 
 function start(res, data) {
 	console.log('Request handler "start" was called.');
@@ -30,5 +31,12 @@ function upload(res, data) {
 	res.end();
 };
 
+function show(res) {
+	console.log('Request handler "show" was called.');
+	res.writeHead(200, { 'Content-Type': 'image/png'});
+	fs.createReadStream('/tmp/test.png').pipe(res);
+}
+
 exports.start = start;
 exports.upload = upload;
+exports.show = show;
