@@ -2,8 +2,9 @@
 
 const querystring = require('querystring');
 const fs = require('fs');
+const formidable = require('formidable');
 
-function start(res, data) {
+function start(res) {
 	console.log('Request handler "start" was called.');
 
 	const body = '<html>' +
@@ -13,8 +14,8 @@ function start(res, data) {
 	'</head>' +
 	'<body>' +
 	'<form action="/upload" method="post">' +
-	'<textarea name="text" rows="20" cols="60"></textarea>' +
-	'<input type="submit" value="Submit text" />' +
+	'<input type="file" name="upload">' +
+	'<input type="submit" value="Upload File" />' +
 	'</form>' +
 	'</body>' +
 	'</html>';
@@ -24,11 +25,21 @@ function start(res, data) {
 	res.end();
 };
 
-function upload(res, data) {
+function upload(res, req) {
 	console.log('Request handler "upload" was called.');
-	res.writeHead(200, { 'Content-Type': 'text/plain'});
-	res.write(`You've sent the text: ${querystring.parse(data).text}`);
-	res.end();
+
+	var form = new formidable.IncomingForm();
+	console.log('about to parse');
+	form.parse(req, function(error, fields, files) {
+		console.log('parsing done');
+		fs.writeFile('/tmp/test.png', files, function (err) {
+			if (err) throw err;
+		});
+		res.writeHead(200, { 'Content-Type': 'text/html'});
+		res.write('received image: <br/>');
+		res.write('<img src="/show" />');
+		res.end();
+	});
 };
 
 function show(res) {
