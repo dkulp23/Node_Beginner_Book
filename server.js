@@ -18,9 +18,7 @@ function start(route, handle) {
 
 		req.addListener('end', function() {
 			route(handle, pathname, res, postData);
-		})
-
-		route(handle, pathname, res);	
+		});
 	};
 
 

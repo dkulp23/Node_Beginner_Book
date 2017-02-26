@@ -1,6 +1,6 @@
 'use strict';
 
-const exec = require('child_process').exec;
+const querystring = require('querystring');
 
 function start(res, data) {
 	console.log('Request handler "start" was called.');
@@ -26,7 +26,7 @@ function start(res, data) {
 function upload(res, data) {
 	console.log('Request handler "upload" was called.');
 	res.writeHead(200, { 'Content-Type': 'text/plain'});
-	res.write(`You've sent: ${data}`);
+	res.write(`You've sent the text: ${querystring.parse(data).text}`);
 	res.end();
 };
 
