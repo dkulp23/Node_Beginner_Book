@@ -3,7 +3,7 @@
 const http = require('http');
 const url = require('url');
 
-function start() {
+function start(route) {
 	function onRequest(req, res) {
 		let pathname = url.parse(req.url).pathname;
 		console.log(`Request for ${pathname} received.`);
@@ -11,6 +11,8 @@ function start() {
 		res.write('hello world');
 		res.end();	
 	};
+
+	route(pathname);
 
 	http.createServer(onRequest).listen(3000);
 	console.log('Server has started');
